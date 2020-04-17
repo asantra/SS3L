@@ -67,12 +67,27 @@ m0_vs_m12_nofloat(const char* textfile = 0, TH2D* inputHist = 0, const char* roo
 
    TH2D* hist;
    
+   /*//// old code, read p values
    if (inputHist!=NULL){
-     TH2D *clonehclPmin2=(TH2D*)inputHist->Clone();
-     hist = DrawUtil::triwsmooth( tree, "p1:m12:m0", "hclPmin2" , "Observed CLsplusb", "p1>=0 && p1<=1", clonehclPmin2 );}
+       TH2D *clonehclPmin2=(TH2D*)inputHist->Clone();
+       *hist = DrawUtil::triwsmooth( tree, "p1:m12:m0", "hclPmin2" , "Observed CLsplusb", "p1>=0 && p1<=1", clonehclPmin2 );
+   }
    else{
-     hist = DrawUtil::triwsmooth( tree, "p1:m12:m0", "hclPmin2" , "Observed CLsplusb", "p1>=0 && p1<=1", inputHist);}
-
+       hist = DrawUtil::triwsmooth( tree, "p1:m12:m0", "hclPmin2" , "Observed CLsplusb", "p1>=0 && p1<=1", inputHist);
+   }*/
+   
+   
+   //// new code, read significance
+   if (inputHist!=NULL){
+       TH2D *clonehclPmin2=(TH2D*)inputHist->Clone();
+       hist = DrawUtil::triwsmooth( tree, "sig:y:x", "sig", "significance", "sig>=0", clonehclPmin2 ); 
+       hist->Smooth();
+   }
+   else{
+       hist = DrawUtil::triwsmooth( tree, "sig:y:x", "sig", "significance", "sig>=0", inputHist ); 
+       hist->Smooth();
+    }
+   
 
    if (hist!=0) {
      hist->Write();
